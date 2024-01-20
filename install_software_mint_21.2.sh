@@ -31,7 +31,7 @@ vscode_install () {
 }
 
 webstorm_install () {
-  TITLE="vscode"
+  TITLE="webstorm"
   echo
   echo -n "# Procedo con l'installazione di ${TITLE}? "
   read sure
@@ -142,6 +142,18 @@ if [[ ${sure} = "s" || ${sure} = "y" ]]; then
 fi
 
 echo
+TITLE="Google Chrome"
+echo -n "~~~ Eseguire l'installazione di ${TITLE}? (s/n):"
+read sure
+if [[ ${sure} = "s" || ${sure} = "y" ]]; then
+  sudo apt-install -y wget
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  sudo dpkg -i google-chrome-stable_current_amd64.deb
+	else
+    echo "*** Installazione ${TITLE} ...[NON ESEGUITA]"
+fi
+
+echo
 TITLE="tools audio"
 echo -n "~~~ Eseguire l'installazione dei ${TITLE}? (s/n):"
 read sure
@@ -166,3 +178,4 @@ fi
 echo "+============================================================================+"
 echo "|                         Installazione terminata                            |"
 echo "+============================================================================+"
+
