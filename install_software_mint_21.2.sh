@@ -1,9 +1,5 @@
 #!/bin/bash
 
-
-
-#############################################
-#############################################
 snap_install () {
 PACKAGES="snapd"
 echo
@@ -20,7 +16,6 @@ if [[ $sure = "s" ]]
 fi
 }
 
-
 vscode_install () {
 echo
 echo -n "# Procedo con l'installazione di vscode? "
@@ -33,7 +28,6 @@ if [[ $sure = "s" ]]
 		echo "* Installazione vscode non eseguita."
 fi
 }
-
 
 development_install () {
 echo
@@ -96,9 +90,6 @@ if [[ $sure = "s" ]]
 fi
 }
 
-
-
-
 ######################
 # Programma principale
 echo "+============================================================================+"
@@ -150,4 +141,3 @@ fi
 echo "+============================================================================+"
 echo "|                         Installazione terminata                            |"
 echo "+============================================================================+"
-
