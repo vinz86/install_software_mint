@@ -111,6 +111,15 @@ echo "+=========================================================================
 echo "|               INSTALLAZIONE SOFTWARE LINUX MINT                            |"
 echo "+============================================================================+"
 echo
+echo -n "~~~ Eseguire l'aggiornamento dei pacchetti? (s/n):"
+read sure
+if [[ ${sure} = "s" || ${sure} = "y" ]]; then
+		sudo apt-get update
+		sudo apt-get upgrade
+	else
+    echo "*** Aggiornamento ...[NON ESEGUITO]"
+fi
+
 echo -n "~~~ Eseguire l'installazione dei pacchetti snap? (s/n):"
 read sure
 if [[ ${sure} = "s" || ${sure} = "y" ]]; then
