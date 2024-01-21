@@ -1,47 +1,11 @@
 #!/bin/bash
 
-snap_install () {
-  PACKAGES="snapd"
-  echo
-  echo -n "# Procedo con l'installazione di ${PACKAGES}? "
-  read sure
-  if [[ $sure = "s" ]]
-    then
-          #install snap
-          sudo rm /etc/apt/preferences.d/nosnap.pref # rimuovo blocco
-          sudo apt install ${PACKAGES}
-      echo "* Installazione ${PACKAGES} terminata."
-    else
-      echo "* Installazione ${PACKAGES} non eseguita."
-  fi
-}
+install_snap_packages () {
+  _install_snap_PACKAGES="code--classic"
+  install_snap
 
-vscode_install () {
-  TITLE="vscode"
-  echo
-  echo -n "# Procedo con l'installazione di ${TITLE}? "
-  read sure
-  if [[ $sure = "s" ]]
-    then
-          sudo snap install --classic code
-      echo "* Installazione ${TITLE} terminata."
-    else
-      echo "* Installazione ${TITLE} non eseguita."
-  fi
-}
-
-webstorm_install () {
-  TITLE="webstorm"
-  echo
-  echo -n "# Procedo con l'installazione di ${TITLE}? "
-  read sure
-  if [[ $sure = "s" ]]
-    then
-          sudo snap install webstorm --classic
-      echo "* Installazione ${TITLE} terminata."
-    else
-      echo "* Installazione ${TITLE} non eseguita."
-  fi
+  _install_snap_PACKAGES="webstorm --classic"
+  install_snap
 }
 
 development_install () {
@@ -105,6 +69,31 @@ generic_install () {
   fi
 }
 
+
+_install_snap_PACKAGES=""
+install_snap () {
+
+  echo
+  REQUIRED_PKG="snapd"
+  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' ${REQUIRED_PKG}|grep "install ok installed")
+  echo "... controllo installazione ${REQUIRED_PKG}: ${PKG_OK}"
+  if [ "" = "${PKG_OK}" ]; then
+    echo "${REQUIRED_PKG} non installato. Installazione in corso."
+    sudo apt-get --yes install $REQUIRED_PKG
+  fi
+
+  echo
+  echo -n "# Procedo con l'installazione di ${_install_snap_PACKAGES}? "
+  read sure
+  if [[ $sure = "s" ]]
+    then
+          sudo apt install -y ${_install_snap_PACKAGES}
+      echo "* Installazione ${_install_snap_PACKAGES} terminata."
+    else
+      echo "* Installazione ${_install_snap_PACKAGES} non eseguita."
+  fi
+}
+
 ######################
 # Programma principale
 echo "+============================================================================+"
@@ -123,9 +112,7 @@ fi
 echo -n "~~~ Eseguire l'installazione dei pacchetti snap? (s/n):"
 read sure
 if [[ ${sure} = "s" || ${sure} = "y" ]]; then
-		snap_install
-        vscode_install
-        webstorm_install
+    install_snap_packages
 	else
     echo "*** Installazione pacchetti snap ...[NON ESEGUITA]"
 fi
@@ -155,10 +142,10 @@ fi
 
 echo
 TITLE="tools audio"
+_generic_install_PACKAGES="audacity lmms"
 echo -n "~~~ Eseguire l'installazione dei ${TITLE}? (s/n):"
 read sure
 if [[ ${sure} = "s" || ${sure} = "y" ]]; then
-        _generic_install_PACKAGES="audacity"
 		generic_install
 	else
     echo "*** Installazione ${TITLE} ...[NON ESEGUITA]"
@@ -166,11 +153,11 @@ fi
 
 echo
 TITLE="tools grafici"
+_generic_install_PACKAGES="gimp inkscape"
 echo -n "~~~ Eseguire l'installazione di ${TITLE}? (s/n):"
 read sure
 if [[ ${sure} = "s" || ${sure} = "y" ]]; then
-        _generic_install_PACKAGES=""
-		#generic_install
+		generic_install
 	else
     echo "*** Installazione ${TITLE} ...[NON ESEGUITA]"
 fi
