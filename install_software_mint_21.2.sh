@@ -136,6 +136,7 @@ if [[ ${sure} = "s" || ${sure} = "y" ]]; then
   sudo apt-install -y wget
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   sudo dpkg -i google-chrome-stable_current_amd64.deb
+  sudo rm google-chrome-stable_current_amd64.deb
 	else
     echo "*** Installazione ${TITLE} ...[NON ESEGUITA]"
 fi
