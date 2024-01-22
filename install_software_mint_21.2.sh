@@ -10,7 +10,7 @@ install_snap_packages () {
 
 development_install () {
   echo
-  echo -n "# Procedo con l'installazione (lamp, phpmyadmin, node, composer)? "
+  echo -n "# Procedo con l'installazione (lamp, phpmyadmin, node, composer, filezilla)? "
   read sure
   if [[ $sure = "s" ]]
     then
@@ -27,6 +27,9 @@ development_install () {
 
           #composer
           sudo apt install -y composer
+
+          #filezilla
+          sudo apt install -y filezilla
 
       echo "* Installazione terminata."
     else
@@ -62,7 +65,7 @@ generic_install () {
   read sure
   if [[ $sure = "s" ]]
     then
-          sudo apt install ${_generic_install_PACKAGES}
+          sudo apt install -yes ${_generic_install_PACKAGES}
       echo "* Installazione ${_generic_install_PACKAGES} terminata."
     else
       echo "* Installazione ${_generic_install_PACKAGES} non eseguita."
@@ -79,6 +82,7 @@ install_snap () {
   echo "... controllo installazione ${REQUIRED_PKG}: ${PKG_OK}"
   if [ "" = "${PKG_OK}" ]; then
     echo "${REQUIRED_PKG} non installato. Installazione in corso."
+    sudo rm /etc/apt/preferences.d/nosnap.pref
     sudo apt-get --yes install $REQUIRED_PKG
   fi
 
@@ -143,7 +147,7 @@ fi
 
 echo
 TITLE="tools audio"
-_generic_install_PACKAGES="audacity lmms"
+_generic_install_PACKAGES="audacity"
 echo -n "~~~ Eseguire l'installazione dei ${TITLE}? (s/n):"
 read sure
 if [[ ${sure} = "s" || ${sure} = "y" ]]; then
