@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install_snap_packages () {
-  _install_snap_PACKAGES="code--classic"
+  _install_snap_PACKAGES="code --classic"
   install_snap
 
   _install_snap_PACKAGES="webstorm --classic"
@@ -10,7 +10,7 @@ install_snap_packages () {
 
 development_install () {
   echo
-  echo -n "# Procedo con l'installazione (lamp, phpmyadmin, node, composer, filezilla)? "
+  echo -n "# Procedo con l'installazione (lamp, phpmyadmin, node, composer, filezilla)? (s/n):"
   read sure
   if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
           #install lamp
@@ -38,18 +38,20 @@ development_install () {
 
 git_install (){
   echo
-  echo -n "# Procedo con l'installazione di git? "
+  echo -n "# Procedo con l'installazione di git? (s/n):"
   read sure
   if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
           #install git
-          sudo apt install -y git
-          echo -n "# Inserisci nome utente git"
-          read gituser
-          git config --global user.name "${gituser}"
-          echo -n "# Inserisci email git"
-          read gitemail
-          git config --global user.email ${gitemail}
-          git config --list
+      sudo apt install -y git
+      echo -n "# Inserisci nome utente git: "
+      read gituser
+      git config --global user.name "${gituser}"
+      echo
+      echo -n "# Inserisci email git: "
+      echo
+      read gitemail
+      git config --global user.email ${gitemail}
+      git config --list
       echo "* Installazione terminata."
     else
       echo "* Installazione non eseguita."
@@ -59,7 +61,7 @@ git_install (){
 _generic_install_PACKAGES=""
 generic_install () {
   echo
-  echo -n "# Procedo con l'installazione di ${_generic_install_PACKAGES}? "
+  echo -n "# Procedo con l'installazione di ${_generic_install_PACKAGES}? (s/n):"
   read sure
   if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
           sudo apt install -y ${_generic_install_PACKAGES}
@@ -69,25 +71,27 @@ generic_install () {
   fi
 }
 
-
 _install_snap_PACKAGES=""
 install_snap () {
-
-  echo
   REQUIRED_PKG="snapd"
   PKG_OK=$(dpkg-query -W --showformat='${Status}\n' ${REQUIRED_PKG}|grep "install ok installed")
   echo "... controllo installazione ${REQUIRED_PKG}: ${PKG_OK}"
   if [ "" = "${PKG_OK}" ]; then
     echo "${REQUIRED_PKG} non installato. Installazione in corso."
-    sudo rm /etc/apt/preferences.d/nosnap.pref
+    # Se è Linux Mint rimuovo il blocco
+    CHECKMINT="$(cat /etc/issue)"
+    if [[ $CHECKMINT == *"Linux Mint"* ]]; then
+        echo "Linux Mint, rimuovo il blocco /etc/apt/preferences.d/nosnap.pref"
+        sudo rm /etc/apt/preferences.d/nosnap.pref
+    fi
     sudo apt-get --yes install $REQUIRED_PKG
   fi
 
   echo
-  echo -n "# Procedo con l'installazione di ${_install_snap_PACKAGES}? "
+  echo -n "# Procedo con l'installazione di ${_install_snap_PACKAGES}? (s/n):"
   read sure
   if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
-          sudo apt install -y ${_install_snap_PACKAGES}
+          sudo snap install ${_install_snap_PACKAGES}
       echo "* Installazione ${_install_snap_PACKAGES} terminata."
     else
       echo "* Installazione ${_install_snap_PACKAGES} non eseguita."
@@ -106,7 +110,7 @@ copy_config (){
   echo
   echo "# Procedo con la copia dei files di configurazione da /home/${olduser} a /home/${newuser}? (s|N):"
   read sure
-  if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
+  if [[ ${sure} = "s" || ${sure} = "y" ]]; then
       if [ -d /home/${olduser} ] && [ -d /home/${newuser} ]; then # controllo se esistono le directory
 
         echo "Copio /home/${olduser}/.ssh"
@@ -135,7 +139,7 @@ copy_config (){
 
         echo "# Procedo con la copia di /home/${olduser}/.thunderbird (potrebbe essere di grandi dimensioni)? (s|N):"
         read sure
-        if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
+        if [[ ${sure} = "s" || ${sure} = "y" ]]; then
           echo "Copio /home/${olduser}/.thunderbird"
           cp -r "/home/${olduser}/.thunderbird" "/home/${newuser}"
         fi
