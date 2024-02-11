@@ -238,12 +238,12 @@ fi
 
 ## TOOLS AUDIO
 echo
-TITLE="tools audio"
-_generic_install_PACKAGES="audacity"
+TITLE="tools per produzione audio (può richiedere molto tempo)"
 echo -n "~~~ Eseguire l'installazione dei ${TITLE}? (s/n):"
 read sure
 if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
-		generic_install
+		sudo apt install ubuntustudio-installer
+    sudo ubuntustudio-installer
 	else
     echo "*** Installazione ${TITLE} ...[NON ESEGUITA]"
 fi
