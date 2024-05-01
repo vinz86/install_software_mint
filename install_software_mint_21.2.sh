@@ -15,7 +15,12 @@ development_install () {
   if [[ ${sure} = "s" || ${sure} = "y" || $sure = "" ]]; then
           #install lamp
           sudo apt install -y lamp-server^
+
           sudo apt install -y phpmyadmin
+          sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+          sudo a2enconf phpmyadmin.conf
+
+          sudo systemctl restart apache2
 
           #install node
           sudo apt install -y nodejs
@@ -31,6 +36,8 @@ development_install () {
           sudo apt install -y filezilla
 
       echo "* Installazione terminata."
+      echo "Ricordati di aggiornare i privilegi di phpmyadmin:"
+      echo "GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'localhost';"
     else
       echo "* Installazione non eseguita."
   fi
